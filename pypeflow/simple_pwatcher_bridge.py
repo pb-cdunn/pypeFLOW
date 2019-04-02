@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+
 from .util import (mkdirs, system, touch, run, cd)
 import pwatcher.blocking
 import pwatcher.fs_based
