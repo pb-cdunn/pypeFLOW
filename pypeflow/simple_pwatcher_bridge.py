@@ -165,7 +165,7 @@ class PwatcherTaskQueue(object):
         }
         q = self.watcher.query(**watcher_args)
         #LOG.debug('In check_done(), result of query:%s' %repr(q))
-        for jobid, status in q['jobids'].iteritems():
+        for jobid, status in q['jobids'].items():
             if status.startswith('EXIT') or status.startswith('DEAD'):
                 self.__running.remove(jobid)
                 node = self.__known[jobid]
@@ -250,7 +250,7 @@ class Workflow(object):
             use_tmpdir = pypetask.dist.use_tmpdir
         node = PypeNode(pypetask.name, pypetask.wdir, pypetask, needs, use_tmpdir, pre_script)
         self.pypetask2node[pypetask] = node
-        for key, plf in pypetask.inputs.iteritems():
+        for key, plf in pypetask.inputs.items():
             if plf.producer is None:
                 continue
             if plf.producer not in self.pypetask2node:
@@ -674,15 +674,15 @@ class _PypeTask(object):
                 self.outputs[key] = val
             else:
                 val.producer = self
-        for key, val in self.inputs.items():
+        for key, val in list(self.inputs.items()):
             if not isinstance(val, PypeLocalFile):
                 assert os.path.isabs(val), 'Inputs cannot be relative at self point: {!r} in {!r}'.format(val, self)
                 self.inputs[key] = findPypeLocalFile(val)
     def assert_canonical(self):
         # Output values will be updated after PypeTask init, so refer back to self as producer.
-        for k,v in self.inputs.iteritems():
+        for k,v in self.inputs.items():
             assert os.path.isabs(v.path), 'For {!r}, input {!r} is not absolute'.format(self.wdir, v)
-        for k,v in self.outputs.iteritems():
+        for k,v in self.outputs.items():
             assert os.path.isabs(v.path), 'For {!r}, output {!r} is not absolute'.format(self.wdir, v)
         common = set(self.inputs.keys()) & set(self.outputs.keys())
         assert (not common), 'A key is used for both inputs and outputs of PypeTask({}), which could be ok, but only if we refer to them as input.foo and output.foo in the bash script: {!r}'.format(self.wdir, common)

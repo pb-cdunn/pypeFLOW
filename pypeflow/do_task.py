@@ -146,7 +146,7 @@ def run_bash(bash_template, myinputs, myoutputs, parameters):
     #var_dict.update(parameters)
     #var_dict.update(myinputs) # for now
     #var_dict.update(myoutputs) # for now
-    valid_parameters = {k:v for k,v in parameters.iteritems() if not k.startswith('_')}
+    valid_parameters = {k:v for k,v in parameters.items() if not k.startswith('_')}
     assert 'input' not in parameters
     assert 'output' not in parameters
     # input/output/params are the main values substituted in the subset of
@@ -197,7 +197,7 @@ def run_cfg_in_tmpdir(cfg, tmpdir, relpath):
     outputs = cfg['outputs']
     parameters = cfg['parameters']
     bash_template_fn = cfg['bash_template_fn']
-    for k,v in inputs.items():
+    for k,v in list(inputs.items()):
         if not os.path.isabs(v):
             inputs[k] = os.path.normpath(os.path.join(relpath, v))
             if tmpdir:
